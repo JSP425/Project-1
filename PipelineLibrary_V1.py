@@ -2,6 +2,16 @@ import os
 import json
 import shutil
 
+# database = {
+#     "name" : "",
+#     "creator" : "",
+#     "filePath" : "",
+#     "assigned" : "",
+#     "producer" : "",
+#     "director" : ""
+# }
+
+
 data = {
     "string": "some string",
     "number": 12,
@@ -12,10 +22,15 @@ data = {
 
 
 class DataRepository:
-    def __init__(self, name, creator, filePath):
+    def __init__(self, name, creator, filePath, databasename):
         self.name = name
         self.creator = creator
         self.filePath = filePath
+        self.databasename = databasename
+        
+        self.createDatabase(databasename)
+
+        #self.updateDatabase(self.name, self.creator, self.filePath)
 
         path=os.path.join(self.filePath) # if only 1 argument, useful for turning \ into /
 
@@ -25,6 +40,38 @@ class DataRepository:
             print("============================== Updated Directory ============================== ")
             print(f"Added directory: {path}")
             os.makedirs(path)
+
+    def createDatabase(self, databasename):
+        self.database=databasename
+        print(f"============================== Database Created For {self.name}: {self.databasename} ==============================")
+        self.database = {
+            "name" : self.name ,
+            "creator" : self.creator,
+            "filePath" : self.filePath,
+            "assigned" : "N/A",
+            "producer" : "N/A",
+            "director" : "N/A"
+        }
+        #print(self.database)
+
+    def updateDatabase(self, key, value):
+        print(f"**** Updated Database {self.name}: {key} : {value} ****")
+        self.database.update({key : value})
+
+    def showDatabase(self):
+        print(f"============================== Showing {self.databasename} {self.name}: ==============================")
+        print(self.database)
+
+    # def updateDatabase(self, name, creator, filePath, *assigned):
+    #     #super().__init__(name, creator, filePath)
+    #     print("============================== Updated Database ============================== ")
+    #     database.update({"name" : name, 
+    #                      "creator" : creator, 
+    #                      "filePath" : filePath, 
+    #                      "assigned" : assigned, 
+    #                      #"producer" : self.producer, 
+    #                      #"director" : self.director
+    #                      })
     
     def get_basicInfo(self):
         print(f"============================== Basic Info: {self.name} ==============================")
@@ -84,10 +131,12 @@ class DataRepository:
         
 
 class DirectoryOfShows(DataRepository):
-    def __init__(self, name, creator, filePath, assigned):
-        super().__init__(name, creator, filePath)
+    def __init__(self, name, creator, filePath, assigned, databasename):
+        super().__init__(name, creator, filePath, databasename)
         self.assigned=assigned
-        
+
+        #self.updateDatabase(assigned , self.assigned)        
+    
 
     def get_basicInfo(self):
         super().get_basicInfo()
@@ -96,12 +145,15 @@ class DirectoryOfShows(DataRepository):
 
 
 class Show(DataRepository):
-    def __init__(self, name, creator, filePath, producer, director):
-        super().__init__(name, creator, filePath)
+    def __init__(self, name, creator, filePath, producer, director, databasename):
+        super().__init__(name, creator, filePath, databasename)
         self.producer = producer
         self.director = director
 
-        #print(f"============================== Added Show: {self.name} ============================== ")
+        print(f"============================== Added Show: {self.name} ============================== ")
+
+        self.updateDatabase("producer", self.producer)
+        self.updateDatabase("director", self.director)
 
     
     # def get_shotList(self):
@@ -120,41 +172,3 @@ class Shot(DataRepository):
     def get_basicInfo(self):
         super().get_basicInfo()
         print(f"Shot Number: {self.shotNumber}")
-
-    
-#myDir=DirectoryOfShows("Directory1", "Me","C:/Users/jpark/Desktop/TestDirectory/content1")
-myDir=DirectoryOfShows("Directory1", "Me",r"C:\Users\jpark\Desktop\TestDirectory", "someone else")
-#print("============================== first report ============================== ")
-myDir.get_basicInfo()
-
-#print("============================== Add Show ============================== ")
-
-FirstShow=Show("Show1","me", r"C:\Users\jpark\Desktop\TestDirectory\Show1", "Producer1", "Director1")
-SecondShow=Show("Show2","me", r"C:\Users\jpark\Desktop\TestDirectory\Show2", "Producer2", "Director2")
-
-#print("============================== second report ==============================")
-myDir.get_content()
-
-FirstShow.get_basicInfo()
-FirstShow.get_content()
-
-#print("============================== Add Shot ============================== ")
-ShotA=Shot("Test Shot", "me", r"C:\Users\jpark\Desktop\TestDirectory\Show1\Test Shot", "0001")
-
-
-#print("============================== third report ==============================")
-#print("eeeeeeeeeeeeeeeeeeeeee")
-FirstShow.get_basicInfo()
-FirstShow.get_content()
-#print("eeeeeeeeeeeeeeeeeeeeee")
-ShotA.get_basicInfo()
-ShotA.get_content()
-#print("eeeeeeeeeeeeeeeeeeeeee")
-
-
-ShotA.add_file("File A")
-ShotA.add_file("File B")
-
-ShotA.get_content()
-#ShotA.remove_file("File A")
-#SecondShow.remove_folder()
