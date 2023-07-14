@@ -9,7 +9,7 @@ class DataManager:
         self.creator = creator
         self.filePath = filePath
         self.databasename = databasename
-        self.databasePath = None 
+        self.databasePath = None # this is cleaner/visually easier to follow but also helps with future debugging by setting the type to none
         
         path=os.path.join(self.filePath) # if only 1 argument, useful for turning \ into /
 
@@ -72,6 +72,7 @@ class DataManager:
     def updateDatabase(self, targetDB: str, key: str, value: Any) -> None:
 
         with open(self.get_filePath(targetDB, self.filePath), "r") as file:
+        #with open(self.databasePath, "r") as file:
             tempDatabase = json.load(file)
 
         tempDatabase[key]=value
@@ -187,3 +188,19 @@ class Shot(DataManager):
             "assigned animators" : []   
 
         } 
+
+
+#Day 1
+# Dir1 = DirectoryOfShows(r"C:\Users\jpark\Desktop\TestDirectory", "Assignee", "Directory1", "Creator1000", "DB1000")
+# Show1 = Show(r"C:\Users\jpark\Desktop\TestDirectory\Show1", "Producer99", "Director99", "BigShow", "Me", "ShowDB")
+
+#Day 2
+#nextDay=DataManager(r"C:\Users\jpark\Desktop\TestDirectory")
+# nextDay.add_content(r"C:\Users\jpark\Desktop\TestDirectory\Show1")
+# nextDay.get_content(r"C:\Users\jpark\Desktop\TestDirectory")
+
+# nextDay=DataManager(r"C:\Users\jpark\Desktop\TestDirectory\Show1")
+# nextDay.add_content(r"C:\Users\jpark\Desktop\TestDirectory\Show1\Shot001")
+# nextDay.get_content(r"C:\Users\jpark\Desktop\TestDirectory\Show1")
+#nextDay.showDatabase("ShowDB")
+
