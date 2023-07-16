@@ -77,6 +77,6 @@ DM.updateDatabase("Show1 DB", "frames per second", 23.97)
 DM.showDatabase("Show1 DB")
 
 ```
+Generally, the user should input the directory containing the shows as some methods, such as `showDatabase()` and `updateDatabase` search its directory and subdirectories for the given file and return its file path. 
 
-The user can manage any database and directory within the initialized file path of the DataManager instance. 
-
+The user can manage any database and directory within the initialized file path of a DataManager instance. 

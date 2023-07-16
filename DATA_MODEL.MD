@@ -2,16 +2,21 @@
 
 In this project, my data model is designed to manage directories for a hypothetical production. The data model relies on a parent class titled `DataManager` and the child classes `DirectoryofShows`, `Show`, and `Shots`.
 
-## Rationale
+## Design Rationale
 
-While reviewing the requirements for the Python library, I noticed that each level of directory required much of the same functionality. For example, a directory **containing shows** requires the ability to add/remove sub directories (shows) in the same way a directory **inside of a show** needs to do so with its subdirectories of shots.
+While reviewing the requirements for the Python library, I noticed that each level of directory required much of the same functionality. For example, a directory **containing shows** requires the ability to add/remove subdirectories (shows) in the same way a directory **inside of a show** needs to do the same with subdirectories of shots.
 
-I view each directory level to be essentially the same except for their names and some specific data fields. For example, there may be an assigned individual to manage a Directory of Shows whereas there may be a producer/director managing a particular show. So, I created the DataManager parent class to encapsulate common functionalities as methods; the child classes inherit from these base functionalities but can overwrite them for their own specific instances. This will make the code easier to maintain.
+I view each directory level to be essentially the same except for their names, filepaths and some specific data fields about them. For example, there may be an assigned individual to manage a Directory of Shows whereas there may be a producer/director managing a particular show. So, I created the DataManager parent class to encapsulate common functionalities as methods; the child classes inherit from these base functionalities but can overwrite them for their own specific instances. This will make the code reusable and easier to maintain.
 
-In my model, there is an 'is-a' relationship between the DataManager and its child classes. All the child classes are just a more specific version of a general DataManager. The difference between the instances are in the database contents of the directory that was generated.
+Ultimately, there is an 'is-a' relationship between the DataManager and its child classes. All the child classes are just a more specific version of a general DataManager. The difference between the instances are in the contents of the database.
 
+So, when a child class is instantiated, a database in the form of a json file is automatically created in the initialized directory. In the json file is a dictionary containing data specific to the instantiated directory. 
 
-## Data Types
+In terms of the parent class DataManager, an instance of it could be used to create a general directory and that would come with a generic database with default values. This is what would result if you call this class with a file path that did not exist previously. If you input a file path that does exist, the class will not create that directory or a corresponding database; rather, it will just acknowledge that this path exists and leave the user with an instance they can access the file management methods. For convenience, I put default values for all the parameters in this class except for the file path so the user only needs to specify the directory they want to work in. Typically, the DataManager parent class should be initialized to manage an existing directory.
+
+As the child classes are differentiated from one another by the contents of their json database, these child classes have required arguments in their initialization that correspond to those fields. 
+
+## Other Data Types
 
 The most common data type in this data model are strings; they are necessary for the user to input file paths and to populate data fields. Most of the data collected will be in string form as the fields are typically qualitative: names of productions, shows, files and people.
 
@@ -25,9 +30,10 @@ Booleans were used to check if a file path already exists and to prompt the user
 
 None types are set in the parent class initialization of variables; this is for cleaner coding purposes so all variables can be identified at the start of the module and so that they are not initialzied later on; this also allows for easier de-bugging/error tracking. 
 
-## Folder Structure
+## General Folder Structure
 
 Project 1 is the root folder. Inside it is the PipelineLibrary_V1.py which is the module and a tests folder containing test_PipelineTest.py. which tests the module via pytest. Inside the root folder are also the READ_Me.md and the DATA_MODEL.md.
+
 
 ## Parent Class: DataManager
 
@@ -69,7 +75,7 @@ The child classes inherit from the `DataManager` class and represent more specif
 
 - **Shot**:
   - Inherits from `DataManager`.
-  - Additional attribute: `shotNumber`, representing the shot number.
-  - Overrides the `createDatabase()` method to include the `shotNumber` attribute in the database dictionary.
+  - Additional attribute: `shotNumber`, `FPS`, `lowerFrameRange`, `upperFrameRange` representing the shot number, frames per second and the frame range respectively.
+  - Overrides the `createDatabase()` method to include the new attributes described above in the database dictionary.
 
 
